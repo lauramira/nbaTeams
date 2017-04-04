@@ -16,14 +16,14 @@ export default class teamsView extends Component {
         super(props);
         this.teams = [
             // { "TeamID": 1, "Key": "WAS",    "City": "Washington", "Name": "Wizards", "Conference": "Eastern", "Division": "Southeast" },
-            // { "TeamID": 2, "Key": "CHA",    "City": "Charlotte", "Name": "Hornets", "Conference": "Eastern", "Division": "Southeast" },
-            { "TeamID": 3, "Key": "ATL",    "City": "Atlanta", "Name": "Hawks", "Conference": "Eastern", "Division": "Southeast" },
+             { "TeamID": 2, "Key": "CHA",  "Logo" : require("../assets/logos/CHA.gif"), "City": "Charlotte", "Name": "Hornets", "Conference": "Eastern", "Division": "Southeast" },
+            { "TeamID": 3, "Key": "ATL", "Logo" : require("../assets/logos/ATL.gif") ,  "City": "Atlanta", "Name": "Hawks", "Conference": "Eastern", "Division": "Southeast" },
             // { "TeamID": 4, "Key": "MIA",    "City": "Miami", "Name": "Heat", "Conference": "Eastern", "Division": "Southeast" },
             // { "TeamID": 5, "Key": "ORL",    "City": "Orlando", "Name": "Magic", "Conference": "Eastern", "Division": "Southeast" },
             // { "TeamID": 6, "Key": "NY",    "City": "New York", "Name": "Knicks", "Conference": "Eastern", "Division": "Atlantic" },
-            // { "TeamID": 7, "Key": "PHI",    "City": "Philadelphia", "Name": "76ers", "Conference": "Eastern", "Division": "Atlantic" },
-            { "TeamID": 8, "Key": "BKN",    "City": "Brooklyn", "Name": "Nets", "Conference": "Eastern", "Division": "Atlantic" },
-            { "TeamID": 9, "Key": "BOS",    "City": "Boston", "Name": "Celtics", "Conference": "Eastern", "Division": "Atlantic" },
+            // { "TeamID": 7, "Key": "PHI", "City": "Philadelphia", "Name": "76ers", "Conference": "Eastern", "Division": "Atlantic" },
+            { "TeamID": 8, "Key": "BKN", "Logo" : require("../assets/logos/BKN.gif") ,"City": "Brooklyn", "Name": "Nets", "Conference": "Eastern", "Division": "Atlantic" },
+            { "TeamID": 9, "Key": "BOS", "Logo" : require("../assets/logos/BOS.gif"), "City": "Boston", "Name": "Celtics", "Conference": "Eastern", "Division": "Atlantic" },
             // { "TeamID": 10, "Key": "TOR",    "City": "Toronto", "Name": "Raptors", "Conference": "Eastern", "Division": "Atlantic" },
             // { "TeamID": 11, "Key": "CHI",    "City": "Chicago", "Name": "Bulls", "Conference": "Eastern", "Division": "Central" },
             // { "TeamID": 12, "Key": "CLE",    "City": "Cleveland", "Name": "Cavaliers", "Conference": "Eastern", "Division": "Central" },
@@ -65,7 +65,7 @@ export default class teamsView extends Component {
                                 name = {team.Name}
                                 conference = {team.Conference}
                                 division = {team.Division}
-                                image = {require('../assets/logos/ATL.gif')}
+                                image = {team.Logo}
                                 />
                         </View>
                     </TouchableHighlight>

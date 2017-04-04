@@ -8,24 +8,33 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  Text,
+  Navigator,
   View
 } from 'react-native';
 
+import TeamsView from './src/views/TeamsView';
+import PlayersView from './src/views/PlayersView';
+
+var ROUTES = {
+  teamsView: TeamsView,
+  playersView: PlayersView
+}
+
 export default class nbaTeams extends Component {
+
+  renderScene(route, navigator) {
+    var Component = ROUTES[route.name]
+    return <Component route={route} navigator={navigator} />
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+        <Navigator
+          style={styles.container}
+          initialRoute={{ name: 'teamsView' }}
+          renderScene={this.renderScene}
+        />
       </View>
     );
   }
@@ -33,21 +42,8 @@ export default class nbaTeams extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    flex: 1
+  }
 });
 
 AppRegistry.registerComponent('nbaTeams', () => nbaTeams);
