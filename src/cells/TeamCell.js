@@ -3,7 +3,8 @@ import {
   AppRegistry,
   StyleSheet,
   View,
-  Text
+  Text,
+  Image
 } from 'react-native';
 
 export default class teamsCell extends Component {
@@ -19,8 +20,10 @@ export default class teamsCell extends Component {
     const name = this.props.name;
     const conference = this.props.conference;
     const division = this.props.division;
+    const image = this.props.image;
     return (
       <View style={styles.container}>
+        <Image source={image} />
         <Text style={styles.title}>{city} {name}</Text>
         <Text style={styles.content}>{conference} - {division}</Text>
       </View>
@@ -40,6 +43,6 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   content: {
-    textAlign : "center",
+    textAlign : "center"
   }
 });
