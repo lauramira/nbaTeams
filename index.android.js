@@ -13,11 +13,11 @@ import {
 } from 'react-native';
 
 import TeamsView from './src/views/TeamsView';
-import PlayersView from './src/views/PlayersView';
+import MapView from './src/views/MapView';
 
 var ROUTES = {
   teamsView: TeamsView,
-  playersView: PlayersView
+  mapView : MapView
 }
 
 export default class nbaTeams extends Component {
