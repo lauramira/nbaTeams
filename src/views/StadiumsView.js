@@ -4,7 +4,9 @@ import {
   StyleSheet,
   View,
   Text,
-  ActivityIndicator
+  ActivityIndicator,
+  Image,
+  Dimensions
 } from 'react-native';
 
 import Header from '../common/Header';
@@ -34,7 +36,7 @@ export default class stadiumView extends Component {
 
     thereIsStadiumSelected() {
       if (!this.state.anyStadiumSelected){
-        return <Text>No Stadium selected</Text>
+        return <Image style={styles.mapImage} source={{uri: "http://i52.tinypic.com/2h7qwk8.jpg"}}/>
       } else {
         const stadium = this.state.stadiumSelected;
         return <StadiumCell 
@@ -99,5 +101,10 @@ const styles = StyleSheet.create({
   detailView: {
     flex: 1,
     alignItems: 'center'
+  },
+  mapImage: {
+    width: Dimensions.get('window').width,
+    resizeMode: 'stretch',
+    height: 200
   }
 });

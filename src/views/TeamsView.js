@@ -5,7 +5,8 @@ import {
   View,
   Text,
   TouchableHighlight,
-  ListView
+  ListView,
+  Dimensions
 } from 'react-native';
 
 import TeamCell from '../cells/TeamCell';
@@ -65,6 +66,7 @@ export default class teamsView extends Component {
 
     const navigator = this.props.navigator;
     const { teams, loading } = this.state;
+    console.log(this.state.teams)
 
     if (loading) {
       return <ActivityIndicator/>
@@ -74,13 +76,14 @@ export default class teamsView extends Component {
       <View style={styles.container}>
         <Header label="TEAMS"/>
         <ListView style={styles.list}
+          contentContainerStyle={styles.contentList}
           dataSource={this.state.teams}
           enableEmptySections={true}
           renderRow={(team) => 
              <TouchableHighlight
                 style={styles.touchableTeam} 
                 key={team.TeamID}
-                onPress={() => navigator.push({ name: 'teamDetailView' })}>
+                onPress={() => navigator.push({ name: 'teamDetailView', data: team})}>
                   <View key={team.TeamID}>
                       <TeamCell
                           key={team.TeamID}                            
@@ -106,6 +109,15 @@ const styles = StyleSheet.create({
   container: {    
     backgroundColor: '#F5FCFF',
     flex: 1
+  },
+  list: {
+   
+  },
+  contentList : {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginLeft: 25
+    
   },
   touchableTeam: {    
     borderStyle : "solid",
