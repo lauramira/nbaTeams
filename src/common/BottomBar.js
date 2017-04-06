@@ -15,7 +15,7 @@ export default class BottomBar extends Component {
         super(props);        
         this.bottomBarButtons = [
             { id: 1, title: "Teams", page: "teamsView", image: require('../assets/icons/teams.jpeg')},
-            { id: 2, title: "Map", page: "mapView", image: require('../assets/icons/teams.jpeg')}           
+            { id: 2, title: "Stadiums", page: "stadiumsView", image: require('../assets/icons/teams.jpeg')}           
         ];
     }
 

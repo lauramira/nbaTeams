@@ -103,9 +103,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',    
     flex: 1
   },
-  list : {    
-    flexWrap: 'wrap',
-    flexDirection: 'row',
+  list : {  
     flex: 1
   },
   touchableTeam: {    

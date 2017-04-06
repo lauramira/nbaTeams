@@ -47,6 +47,7 @@ export default class teamsCell extends Component {
   }
 
   imageMapping(Key) {
+    debugger;
     return this.images[Key];
   }
 
@@ -61,7 +62,7 @@ export default class teamsCell extends Component {
     const image = this.props.image;
     return (
       <View style={styles.container}>
-        <Image style={styles.image} source={{ uri: this.imageMapping(teamKey) }} />
+        <Image style={styles.image} source={{uri: this.imageMapping(teamKey) }} />
         <Text style={styles.title}>{city} {name}</Text>        
       </View>
     );
