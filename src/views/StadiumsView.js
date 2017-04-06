@@ -11,9 +11,10 @@ import Header from '../common/Header';
 import BottomBar from '../common/BottomBar';
 import _ from 'underscore';
 import MapView from 'react-native-maps';
+import StadiumCell from '../cells/StadiumCell';
 
 export default class stadiumView extends Component {
-    state = { stadiums: [], loading: true }
+    state = { stadiums: [], loading: true, stadiumSelected : {}, anyStadiumSelected: false}
 
     constructor(props){
         super(props);
@@ -31,6 +32,21 @@ export default class stadiumView extends Component {
       } 
     }
 
+    thereIsStadiumSelected() {
+      if (!this.state.anyStadiumSelected){
+        return <Text>No Stadium selected</Text>
+      } else {
+        const stadium = this.state.stadiumSelected;
+        return <StadiumCell 
+              name={stadium.Name}
+              city={stadium.City}
+              zip={stadium.Zip}
+              address={stadium.Address}
+              state={stadium.State}
+              capacity={stadium.Capacity}
+              />
+      }
+    }
 
   render() {
     const navigator = this.props.navigator;
@@ -57,11 +73,14 @@ export default class stadiumView extends Component {
                     <MapView.Marker
                       coordinate={{latitude: stadium.latitude, longitude: stadium.longitude}}
                       key={stadium.StadiumID}
+                      onPress={()=> this.setState({ stadiumSelected: stadium, anyStadiumSelected: true})}
                     />
                 );
                 })}
           </MapView>
-          <View style={styles.detailView}><Text>NBA STADIUMS</Text></View>
+          <View style={styles.detailView}>
+            { this.thereIsStadiumSelected() }
+          </View>
         </View>
         <BottomBar navigator={navigator}/>
       </View>

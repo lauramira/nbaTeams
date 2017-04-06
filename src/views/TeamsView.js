@@ -52,8 +52,9 @@ export default class teamsView extends Component {
         ]  
 
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      this.state.teams = this.teamsArray;
       this.state = {
-        teams: ds.cloneWithRows(this.teamsArray),
+        teams: ds.cloneWithRows(this.state.teams ),
         loading: false
       }
 
@@ -62,7 +63,7 @@ export default class teamsView extends Component {
 
   render() {
 
-    const navigatior = this.props.navigator;
+    const navigator = this.props.navigator;
     const { teams, loading } = this.state;
 
     if (loading) {
@@ -76,7 +77,10 @@ export default class teamsView extends Component {
           dataSource={this.state.teams}
           enableEmptySections={true}
           renderRow={(team) => 
-             <TouchableHighlight style={styles.touchableTeam} key={team.TeamID}>
+             <TouchableHighlight
+                style={styles.touchableTeam} 
+                key={team.TeamID}
+                onPress={() => navigator.push({ name: 'teamDetailView' })}>
                   <View key={team.TeamID}>
                       <TeamCell
                           key={team.TeamID}                            
@@ -92,7 +96,7 @@ export default class teamsView extends Component {
           }
          />
         
-        <BottomBar navigator={navigatior}/>
+        <BottomBar navigator={navigator}/>
       </View>
     );
   }
@@ -100,10 +104,7 @@ export default class teamsView extends Component {
 
 const styles = StyleSheet.create({
   container: {    
-    backgroundColor: '#F5FCFF',    
-    flex: 1
-  },
-  list : {  
+    backgroundColor: '#F5FCFF',
     flex: 1
   },
   touchableTeam: {    

@@ -14,10 +14,13 @@ import {
 
 import TeamsView from './src/views/TeamsView';
 import StadiumsView from './src/views/StadiumsView';
+import TeamDetailView from './src/views/TeamDetailView';
 
 var ROUTES = {
   teamsView: TeamsView,
-  stadiumsView : StadiumsView
+  stadiumsView : StadiumsView,
+  teamDetailView: TeamDetailView
+
 }
 
 export default class nbaTeams extends Component {

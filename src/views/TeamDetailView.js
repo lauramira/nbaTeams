@@ -6,11 +6,11 @@ import {
   Text
 } from 'react-native';
 
-export default class playersView extends Component {
+export default class teamDetailView extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Players!</Text>
+        <Text>TEAM DETAIL!</Text>
       </View>
     );
   }
