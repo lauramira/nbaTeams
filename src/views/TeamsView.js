@@ -107,7 +107,7 @@ export default class teamsView extends Component {
 
 const styles = StyleSheet.create({
   container: {    
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#002244',
     flex: 1
   },
   list: {
@@ -121,13 +121,13 @@ const styles = StyleSheet.create({
   },
   touchableTeam: {    
     borderStyle : "solid",
-    borderColor: "gray",
+    borderColor: "white",
     borderRadius: 8,
     borderWidth : 2,
     padding: 15,
     margin: 10,
     width: 140,
     height: 140,
-    backgroundColor: "white"    
+    backgroundColor: "white"   
   }
 });

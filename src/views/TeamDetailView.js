@@ -208,9 +208,11 @@ export default class teamDetailView extends Component {
               enableEmptySections={true}
               renderRow={(player) => 
                 <View style={styles.viewContainer}>
+                  <View style={styles.secondViewContainer}>
                   <Image style={styles.image} source={{uri: player.PhotoUrl}}/>
                   <Text style={styles.title}>{player.FirstName} {player.LastName}</Text>
                   <Text># {player.Jersey}</Text>
+                  </View>
                   </View>
               }
             />
@@ -234,12 +236,18 @@ const styles = StyleSheet.create({
   image: {
     padding: 10,
     height: 90,
-    width: 90
+    width: 90,
+    borderRadius: 45,
+    backgroundColor: 'white',
+    marginTop: 5,
+    borderColor: 'gray',
+    borderWidth : 1
   },
   contentList : {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginLeft: 25
+    marginLeft: 25,
+    alignItems: 'center'
     
   },
   title: {
@@ -254,11 +262,23 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderRadius: 8,
     borderWidth : 2,
-    padding: 15,
+    padding: 5,
     margin: 5,
     width: 150,
     height: 200,
     backgroundColor: "white",
+    alignItems: 'center' 
+  },
+  secondViewContainer: {
+    borderStyle : "solid",
+    borderColor: "#D0103A",
+    borderRadius: 8,
+    borderWidth : 2,
+    paddingLeft: 15,
+    paddingRight: 15,
+    height: 185,
+    width: 140,
+    backgroundColor: 'gray',
     alignItems: 'center' 
   }
 });

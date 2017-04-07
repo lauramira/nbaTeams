@@ -47,7 +47,6 @@ export default class teamsCell extends Component {
   }
 
   imageMapping(Key) {
-    debugger;
     return this.images[Key];
   }
 

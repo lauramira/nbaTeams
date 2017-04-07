@@ -36,7 +36,7 @@ export default class stadiumView extends Component {
 
     thereIsStadiumSelected() {
       if (!this.state.anyStadiumSelected){
-        return <Image style={styles.mapImage} source={{uri: "http://i52.tinypic.com/2h7qwk8.jpg"}}/>
+        return <Image style={styles.mapImage} source={ require("../assets/nba.png")}/>
       } else {
         const stadium = this.state.stadiumSelected;
         return <StadiumCell 
@@ -46,6 +46,7 @@ export default class stadiumView extends Component {
               address={stadium.Address}
               state={stadium.State}
               capacity={stadium.Capacity}
+              stadiumId={stadium.StadiumID}
               />
       }
     }
@@ -60,7 +61,7 @@ export default class stadiumView extends Component {
 
     return (
       <View style={styles.container}>
-        <Header label="MAP"/>
+        <Header label="STADIUMS"/>
         <View style={styles.container}>
             <MapView
               style={styles.map}
@@ -93,18 +94,20 @@ export default class stadiumView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: '#002244',
   },
   map: {
-    flex: 2
+    flex: 2,
+    margin: 5
   },
   detailView: {
     flex: 1,
     alignItems: 'center'
   },
   mapImage: {
-    width: Dimensions.get('window').width,
+    width: 300,
     resizeMode: 'stretch',
-    height: 200
+    height: 180
   }
 });

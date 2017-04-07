@@ -14,8 +14,8 @@ export default class BottomBar extends Component {
    constructor(props) {
         super(props);        
         this.bottomBarButtons = [
-            { id: 1, title: "Teams", page: "teamsView", image: require('../assets/icons/teams.jpeg')},
-            { id: 2, title: "Stadiums", page: "stadiumsView", image: require('../assets/icons/teams.jpeg')}           
+            { id: 1, title: "Teams", page: "teamsView", image: require('../assets/icons/team1.png')},
+            { id: 2, title: "Stadiums", page: "stadiumsView", image: require('../assets/icons/stadiums.png')}           
         ];
     }
 
@@ -32,7 +32,8 @@ export default class BottomBar extends Component {
                   key={button.id} 
                   title={button.title} 
                   page={button.page}
-                  navigator={navigator}/>                    
+                  navigator={navigator}
+                  image={button.image}/>                    
               )
           })
         }
@@ -48,6 +49,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',    
     width: Dimensions.get('window').width,
-    backgroundColor: 'green'    
+    backgroundColor: "#8996A0",     
   }
 })

@@ -11,7 +11,7 @@ import {
 export default class ButtonBar extends Component {
 
   render() {
-    const image = require('../assets/icons/teams.jpeg');
+    const image = this.props.image;
     const title = this.props.title;
     const navigator = this.props.navigator;
     const page = this.props.page;
@@ -22,7 +22,7 @@ export default class ButtonBar extends Component {
         onPress={() => navigator.replace({ name: page })}>
       <View style={styles.view}>
         <Image source={image} style={styles.images}/>
-        <Text>{title}</Text>
+        <Text style={styles.text}>{title}</Text>
       </View>
       </TouchableHighlight>
     );
@@ -39,7 +39,10 @@ const styles = StyleSheet.create({
      padding: 5
   },
   images: {
-      width: 50,
+      width: 72,
       height: 50
+  },
+  text: {
+    color: 'white'
   }
 })
