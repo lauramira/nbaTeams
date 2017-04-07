@@ -62,7 +62,7 @@ export default class stadiumView extends Component {
     return (
       <View style={styles.container}>
         <Header label="STADIUMS"/>
-        <View style={styles.container}>
+        <View style={styles.mapContainer}>
             <MapView
               style={styles.map}
               region={{
@@ -96,14 +96,19 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#002244',
+    height: Dimensions.get('window').height,
   },
   map: {
     flex: 2,
-    margin: 5
+    width: Dimensions.get('window').width
   },
   detailView: {
     flex: 1,
     alignItems: 'center'
+  },
+  mapContainer: {
+     flex: 1,
+     margin: 5
   },
   mapImage: {
     width: 300,
