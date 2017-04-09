@@ -5,14 +5,19 @@ import {
   View,
   Text,
   ListView,
-  Image
+  Image,
+  TouchableHighlight,
+  TouchableOpacity
 } from 'react-native';
 
 import Header from '../common/Header';
+import Modal from 'react-native-modal';
 
 export default class teamDetailView extends Component {
 
-  state = { players: [], loading: true }
+  state = { players: [], loading: true, isModalVisible: false, selectedPlayer: {
+    "Name" : ""
+  }}
 
   constructor(props){
     super(props);
@@ -190,13 +195,42 @@ export default class teamDetailView extends Component {
         players: ds.cloneWithRows(this.state.players ),
         loading: false
       }
+      this.setState({players : this.state.players})
   }
+
+   _renderButton = (text, onPress) => (
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.button}>
+        <Text>{text}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
+  showPlayerDetail = (player) => {
+    this.setState({ selectedPlayer: player , isModalVisible: true})
+  }
+
+  getDateFormat(date) {
+    return date.split("T")[0];
+  }
+
+  _renderModalContent = () => (
+    <View style={styles.modalContent}>
+      <Text>{this.state.selectedPlayer && this.state.selectedPlayer.FirstName + " " + this.state.selectedPlayer.LastName}</Text>
+      <Text>{this.state.selectedPlayer && "Jersey number: #" + this.state.selectedPlayer.Jersey}</Text>
+       <Text>{this.state.selectedPlayer && "Position: " + this.state.selectedPlayer.Position}</Text>
+       <Text>{this.state.selectedPlayer && "Height: " + this.state.selectedPlayer.Height}</Text>
+       <Text>{this.state.selectedPlayer && "Weight: " + this.state.selectedPlayer.Weight}</Text>
+       <Text>{this.state.selectedPlayer && "Birth Date: " + this.getDateFormat(this.state.selectedPlayer.BirthDate)}</Text>
+      {this._renderButton('Close', () => this.setState({ isModalVisible: false }))}
+    </View>
+  );
+  
 
 
   render() {
 
     const team = this.props.route.data;
-    console.log(this.state.players)
 
     return (
       <View style={styles.container}>
@@ -207,16 +241,20 @@ export default class teamDetailView extends Component {
               dataSource={this.state.players}
               enableEmptySections={true}
               renderRow={(player) => 
-                <View style={styles.viewContainer}>
-                  <View style={styles.secondViewContainer}>
-                  <Image style={styles.image} source={{uri: player.PhotoUrl}}/>
-                  <Text style={styles.title}>{player.FirstName} {player.LastName}</Text>
-                  <Text># {player.Jersey}</Text>
+               <TouchableHighlight
+                key={team.TeamID}
+                onPress={() => this.showPlayerDetail(player)}>
+                  <View style={styles.viewContainer} >
+                    <Image style={styles.image} source={{uri: player.PhotoUrl}}/>
+                    <Text style={styles.title}>{player.FirstName} {player.LastName}</Text>
                   </View>
-                  </View>
+                </TouchableHighlight>
               }
             />
         </View>
+        <Modal isVisible={this.state.isModalVisible}>
+          {this._renderModalContent()}
+        </Modal>
       </View>
     );
   }
@@ -227,58 +265,57 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#002244'
   },
   dataView : {
-    flex: 1,
-    backgroundColor: 'yellow'
+    flex: 1
   },
   image: {
-    padding: 10,
-    height: 90,
-    width: 90,
-    borderRadius: 45,
+    height: 80,
+    width: 80,
     backgroundColor: 'white',
     marginTop: 5,
-    borderColor: 'gray',
-    borderWidth : 1
+    justifyContent: 'center'
   },
   contentList : {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginLeft: 25,
+    justifyContent: 'center',
     alignItems: 'center'
     
   },
   title: {
     fontWeight: "bold",
-    fontSize: 15,
-    textAlign: "center",
-    paddingBottom: 10,
-    paddingTop: 10
+    fontSize: 12,
+    marginBottom: 10,
+    marginTop: 10
   },
   viewContainer :{
     borderStyle : "solid",
-    borderColor: "gray",
-    borderRadius: 8,
     borderWidth : 2,
-    padding: 5,
     margin: 5,
-    width: 150,
-    height: 200,
-    backgroundColor: "white",
-    alignItems: 'center' 
+    width: 100,
+    height: 130,
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 3
   },
-  secondViewContainer: {
-    borderStyle : "solid",
-    borderColor: "#D0103A",
-    borderRadius: 8,
-    borderWidth : 2,
-    paddingLeft: 15,
-    paddingRight: 15,
-    height: 185,
-    width: 140,
-    backgroundColor: 'gray',
-    alignItems: 'center' 
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  button: {
+    backgroundColor: 'lightblue',
+    padding: 12,
+    margin: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   }
 });
