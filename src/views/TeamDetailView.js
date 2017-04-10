@@ -11,13 +11,12 @@ import {
 } from 'react-native';
 
 import Header from '../common/Header';
+import PlayerInfoKeyValue from '../cells/PlayerInfoKeyValue';
 import Modal from 'react-native-modal';
 
 export default class teamDetailView extends Component {
 
-  state = { players: [], loading: true, isModalVisible: false, selectedPlayer: {
-    "Name" : ""
-  }}
+  state = { players: [], loading: true, isModalVisible: false, selectedPlayer: null }
 
   constructor(props){
     super(props);
@@ -187,8 +186,9 @@ export default class teamDetailView extends Component {
           "BirthDate": "1993-12-15T00:00:00",
           "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20001755.png"
         }
+
     ]
-    
+
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       this.state.players = this.teamPlayersArray;
       this.state = {
@@ -201,7 +201,7 @@ export default class teamDetailView extends Component {
    _renderButton = (text, onPress) => (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.button}>
-        <Text>{text}</Text>
+        <Text style={styles.buttonText}>{text}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -214,19 +214,32 @@ export default class teamDetailView extends Component {
     return date.split("T")[0];
   }
 
-  _renderModalContent = () => (
-    <View style={styles.modalContent}>
-      <Text>{this.state.selectedPlayer && this.state.selectedPlayer.FirstName + " " + this.state.selectedPlayer.LastName}</Text>
-      <Text>{this.state.selectedPlayer && "Jersey number: #" + this.state.selectedPlayer.Jersey}</Text>
-       <Text>{this.state.selectedPlayer && "Position: " + this.state.selectedPlayer.Position}</Text>
-       <Text>{this.state.selectedPlayer && "Height: " + this.state.selectedPlayer.Height}</Text>
-       <Text>{this.state.selectedPlayer && "Weight: " + this.state.selectedPlayer.Weight}</Text>
-       <Text>{this.state.selectedPlayer && "Birth Date: " + this.getDateFormat(this.state.selectedPlayer.BirthDate)}</Text>
-      {this._renderButton('Close', () => this.setState({ isModalVisible: false }))}
+  _renderModalContent = (selectedPlayer) => (
+    <View >
+      {selectedPlayer && <View style={styles.modalContent}>
+        <Text style={styles.title}>{selectedPlayer.FirstName + " " + selectedPlayer.LastName}</Text>
+        <PlayerInfoKeyValue index={0} value={"#" + selectedPlayer.Jersey} />
+        <PlayerInfoKeyValue index={1} value={selectedPlayer.Position} />
+        <PlayerInfoKeyValue index={2} value={selectedPlayer.Height} />
+        <PlayerInfoKeyValue index={3} value={selectedPlayer.Weight} />
+        <PlayerInfoKeyValue index={4} value={this.getDateFormat(selectedPlayer.BirthDate)} />
+        {this._renderButton('Close', () => this.setState({ isModalVisible: false }))}
+      </View>}
     </View>
   );
   
-
+renderPlayerView(player){
+  return (
+    <TouchableHighlight
+      key={player.PlayerID}
+      onPress={() => this.showPlayerDetail(player)}>
+        <View style={styles.viewContainer} >
+          <Image style={styles.image} source={{uri: player.PhotoUrl}}/>
+          <Text style={styles.title}>{player.FirstName} {player.LastName}</Text>
+        </View>
+    </TouchableHighlight>
+  )
+}
 
   render() {
 
@@ -241,19 +254,12 @@ export default class teamDetailView extends Component {
               dataSource={this.state.players}
               enableEmptySections={true}
               renderRow={(player) => 
-               <TouchableHighlight
-                key={team.TeamID}
-                onPress={() => this.showPlayerDetail(player)}>
-                  <View style={styles.viewContainer} >
-                    <Image style={styles.image} source={{uri: player.PhotoUrl}}/>
-                    <Text style={styles.title}>{player.FirstName} {player.LastName}</Text>
-                  </View>
-                </TouchableHighlight>
+                this.renderPlayerView(player)
               }
             />
         </View>
         <Modal isVisible={this.state.isModalVisible}>
-          {this._renderModalContent()}
+          {this._renderModalContent(this.state.selectedPlayer)}
         </Modal>
       </View>
     );
@@ -299,7 +305,7 @@ const styles = StyleSheet.create({
     height: 130,
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 3
+    borderRadius: 6
   },
   modalContent: {
     backgroundColor: 'white',
@@ -310,12 +316,15 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   button: {
-    backgroundColor: 'lightblue',
+    backgroundColor: '#002244',
     padding: 12,
     margin: 16,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
     borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  buttonText: {
+    color: 'white',
   }
 });

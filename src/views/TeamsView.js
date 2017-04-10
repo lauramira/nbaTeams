@@ -58,9 +58,20 @@ export default class teamsView extends Component {
         teams: ds.cloneWithRows(this.state.teams ),
         loading: false
       }
-
     }
 
+  renderListViewItem(team){
+    return (
+      <TouchableHighlight
+        style={styles.touchableTeam} 
+        key={team.TeamID}
+        onPress={() => this.props.navigator.push({ name: 'teamDetailView', data: team})}>
+          <View key={team.TeamID}>
+            <TeamCell key={team.TeamID} team={team} />
+         </View>
+      </TouchableHighlight>
+      )
+    }
 
   render() {
 
@@ -73,29 +84,14 @@ export default class teamsView extends Component {
     }   
 
     return (
-      <View style={styles.container}>
+        <View style={styles.container}>
         <Header label="TEAMS"/>
         <ListView style={styles.list}
           contentContainerStyle={styles.contentList}
           dataSource={this.state.teams}
           enableEmptySections={true}
           renderRow={(team) => 
-             <TouchableHighlight
-                style={styles.touchableTeam} 
-                key={team.TeamID}
-                onPress={() => navigator.push({ name: 'teamDetailView', data: team})}>
-                  <View key={team.TeamID}>
-                      <TeamCell
-                          key={team.TeamID}                            
-                          teamKey = {team.Key}
-                          city = {team.City}
-                          name = {team.Name}
-                          conference = {team.Conference}
-                          division = {team.Division}
-                          image = {team.Key}
-                          />
-                  </View>
-              </TouchableHighlight>
+            this.renderListViewItem(team)
           }
          />
         

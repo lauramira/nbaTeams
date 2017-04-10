@@ -52,17 +52,12 @@ export default class teamsCell extends Component {
 
 
   render() {
-    const id = this.props.id;
-    const teamKey = this.props.teamKey;    
-    const city = this.props.city
-    const name = this.props.name;
-    const conference = this.props.conference;
-    const division = this.props.division;
-    const image = this.props.image;
+    const team = this.props.team;
+
     return (
       <View style={styles.container}>
-        <Image style={styles.image} source={{uri: this.imageMapping(teamKey) }} />
-        <Text style={styles.title}>{city} {name}</Text>        
+        <Image style={styles.image} source={{uri: this.imageMapping(team.Key) }} />
+        <Text style={styles.title}>{team.City} {team.Name}</Text>        
       </View>
     );
   }
@@ -75,7 +70,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: 15,
+    fontSize: 13,
     textAlign: "center",
     paddingBottom: 10,
     paddingTop: 10
