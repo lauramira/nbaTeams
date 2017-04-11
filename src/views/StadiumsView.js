@@ -6,7 +6,8 @@ import {
   Text,
   ActivityIndicator,
   Image,
-  Dimensions
+  Dimensions,
+  ScrollView
 } from 'react-native';
 
 import Header from '../common/Header';
@@ -62,29 +63,30 @@ export default class stadiumView extends Component {
     return (
       <View style={styles.container}>
         <Header label="STADIUMS"/>
-        <View style={styles.mapContainer}>
-            <MapView
-              style={styles.map}
-              region={{
-                  latitude: 35.043021,
-                  longitude: -97.2690242,
-                  latitudeDelta: 35.015,
-                  longitudeDelta: 60.0121,
-              }}>
-              {this.state.stadiums.map(stadium => {
-                return (
-                    <MapView.Marker
-                      coordinate={{latitude: stadium.latitude, longitude: stadium.longitude}}
-                      key={stadium.StadiumID}
-                      onPress={()=> this.setState({ stadiumSelected: stadium, anyStadiumSelected: true})}
-                    />
-                );
-                })}
-          </MapView>
-          <View style={styles.detailView}>
-            { this.thereIsStadiumSelected() }
+          <View style={styles.mapContainer}>
+              <MapView
+                style={styles.map}
+                region={{
+                    latitude: 35.043021,
+                    longitude: -97.2690242,
+                    latitudeDelta: 35.015,
+                    longitudeDelta: 60.0121,
+                }}>
+                {this.state.stadiums.map(stadium => {
+                  return (
+                      <MapView.Marker
+                        coordinate={{latitude: stadium.latitude, longitude: stadium.longitude}}
+                        key={stadium.StadiumID}
+                        onPress={()=> this.setState({ stadiumSelected: stadium, anyStadiumSelected: true})}
+                      />
+                  );
+                  })}
+            </MapView>
+           
+            <View style={styles.detailView}>
+              { this.thereIsStadiumSelected() }
+            </View>
           </View>
-        </View>
         <BottomBar navigator={navigator}/>
       </View>
     );

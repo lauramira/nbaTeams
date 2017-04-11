@@ -195,7 +195,6 @@ export default class teamDetailView extends Component {
         players: ds.cloneWithRows(this.state.players ),
         loading: false
       }
-      this.setState({players : this.state.players})
   }
 
    _renderButton = (text, onPress) => (
@@ -276,7 +275,6 @@ const styles = StyleSheet.create({
   },
   dataView : {
     flex: 1,
-    display:'flex', 
     flexDirection:'row', 
     justifyContent:'center',
     padding: 10

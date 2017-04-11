@@ -129,9 +129,8 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    display:'flex', 
     flexDirection:'row', 
     justifyContent:'center',
-    padding: 10,
+    padding: 10
   }
-});
+}); 

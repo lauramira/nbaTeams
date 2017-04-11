@@ -44,7 +44,7 @@ export default class stadiumCell extends Component {
 
   }
 
-  imageMapping(Key) {
+  imageStadiumMapping(Key) {
     return this.images[Key];
   }
 
@@ -58,11 +58,9 @@ export default class stadiumCell extends Component {
     const capacity = this.props.capacity
     const id = this.props.stadiumId
 
-    console.log(name)
-
     return (
       <View style={styles.container}>
-          <Image style={styles.image} source={{uri: this.imageMapping(id) }} />
+          <Image style={styles.image} source={{uri: this.imageStadiumMapping(id) }} />
           <Text style={styles.title}>{name}</Text>
           <Text style={styles.address}>{address + ", " + zip + ", " + city + ", " + state }</Text> 
           <Text style={styles.capacity}>Capactity: {capacity}</Text>
@@ -93,7 +91,6 @@ const styles = StyleSheet.create({
   image: {
     width: 110,
     height: 80,
-    resizeMode: 'stretch',
     borderRadius: 4,
     marginBottom: 10
   }
