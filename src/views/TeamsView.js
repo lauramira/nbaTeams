@@ -86,6 +86,7 @@ export default class teamsView extends Component {
     return (
         <View style={styles.container}>
         <Header label="TEAMS"/>
+        <View style={styles.listContainer}>
         <ListView style={styles.list}
           contentContainerStyle={styles.contentList}
           dataSource={this.state.teams}
@@ -94,6 +95,7 @@ export default class teamsView extends Component {
             this.renderListViewItem(team)
           }
          />
+         </View>
         
         <BottomBar navigator={navigator}/>
       </View>
@@ -103,17 +105,16 @@ export default class teamsView extends Component {
 
 const styles = StyleSheet.create({
   container: {    
-    backgroundColor: '#002244',
-    flex: 1
-  },
-  list: {
-   
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#002244'
   },
   contentList : {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginLeft: 25
-    
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   touchableTeam: {    
     borderStyle : "solid",
@@ -125,5 +126,12 @@ const styles = StyleSheet.create({
     width: 140,
     height: 140,
     backgroundColor: "white"   
+  },
+  listContainer: {
+    flex: 1,
+    display:'flex', 
+    flexDirection:'row', 
+    justifyContent:'center',
+    padding: 10,
   }
 });

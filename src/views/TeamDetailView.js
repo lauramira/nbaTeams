@@ -244,12 +244,13 @@ renderPlayerView(player){
   render() {
 
     const team = this.props.route.data;
+    const navigator = this.props.navigator;
 
     return (
       <View style={styles.container}>
-        <Header label={team.City + " " + team.Name} />
+        <Header label={team.City + " " + team.Name} hasBackButton={true} navigator={navigator}/>
         <View style={styles.dataView}>
-            <ListView style={styles.list}
+            <ListView
               contentContainerStyle={styles.contentList}
               dataSource={this.state.players}
               enableEmptySections={true}
@@ -274,7 +275,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#002244'
   },
   dataView : {
-    flex: 1
+    flex: 1,
+    display:'flex', 
+    flexDirection:'row', 
+    justifyContent:'center',
+    padding: 10
   },
   image: {
     height: 80,
@@ -286,7 +291,6 @@ const styles = StyleSheet.create({
   contentList : {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginLeft: 25,
     justifyContent: 'center',
     alignItems: 'center'
     
