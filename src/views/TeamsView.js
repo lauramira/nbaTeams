@@ -29,6 +29,7 @@ export default class teamsView extends Component {
 
     async componentWillMount() {
       const uri = 'http://lmira.lasalle.ovh/api/teams';
+
       try {
         const response = await fetch(uri);
         const jsonData = await response.json();
@@ -60,7 +61,6 @@ export default class teamsView extends Component {
 
     const navigator = this.props.navigator;
     const { teams, loading } = this.state;
-    console.log(this.state.teams)
 
     if (loading) {
       return <ActivityIndicator/>

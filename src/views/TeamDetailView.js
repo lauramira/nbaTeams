@@ -18,182 +18,31 @@ export default class teamDetailView extends Component {
 
   state = { players: [], loading: true, isModalVisible: false, selectedPlayer: null }
 
+  async componentWillMount() {
+    const uri = 'https://api.fantasydata.net/v3/nba/stats/JSON/Players/' + this.props.route.data.Key;
+    const request = new Request(uri, {
+      headers: new Headers({
+        "Ocp-Apim-Subscription-Key" : "11a0a6437f5843aeb9dfef82f0b3670b"
+      })
+    });
+
+    try {
+        const response = await fetch(request);
+        const jsonData = await response.json();
+        
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        this.setState({ loading: false , players: ds.cloneWithRows(jsonData)})
+      } catch(e) {
+        console.log(e);
+      }
+    }
+
   constructor(props){
     super(props);
-    this.teamPlayersArray =[
-      {
-          "Jersey": 13,
-          "PositionCategory": "C",
-          "Position": "C",
-          "FirstName": "Marcin",
-          "LastName": "Gortat",
-          "Height": 83,
-          "Weight": 240,
-          "BirthDate": "1984-02-17T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20000440.png"
-        },
-        {
-          "Jersey": 3,
-          "PositionCategory": "G",
-          "Position": "SG",
-          "FirstName": "Bradley",
-          "LastName": "Beal",
-          "Height": 77,
-          "Weight": 207,
-          "BirthDate": "1993-06-28T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20000441.png"
-        },
-        {
-          "Jersey": 2,
-          "PositionCategory": "G",
-          "Position": "PG",
-          "FirstName": "John",
-          "LastName": "Wall",
-          "Height": 76,
-          "Weight": 210,
-          "BirthDate": "1990-09-06T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20000442.png"
-        },
-        {
-          "Jersey": 22,
-          "PositionCategory": "F",
-          "Position": "SF",
-          "FirstName": "Otto",
-          "LastName": "Porter",
-          "Height": 80,
-          "Weight": 198,
-          "BirthDate": "1993-06-03T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20000443.png"
-        },
-        {
-          "Jersey": 44,
-          "PositionCategory": "G",
-          "Position": "SG",
-          "FirstName": "Bojan",
-          "LastName": "Bogdanovic",
-          "Height": 80,
-          "Weight": 225,
-          "BirthDate": "1989-04-18T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20000591.png"
-        },
-        {
-          "Jersey": 28,
-          "PositionCategory": "C",
-          "Position": "C",
-          "FirstName": "Ian",
-          "LastName": "Mahinmi",
-          "Height": 83,
-          "Weight": 262,
-          "BirthDate": "1986-11-05T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20000737.png"
-        },
-        {
-          "Jersey": 14,
-          "PositionCategory": "F",
-          "Position": "PF",
-          "FirstName": "Jason",
-          "LastName": "Smith",
-          "Height": 84,
-          "Weight": 240,
-          "BirthDate": "1986-03-02T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20000790.png"
-        },
-        {
-          "Jersey": 7,
-          "PositionCategory": "G",
-          "Position": "PG",
-          "FirstName": "Brandon",
-          "LastName": "Jennings",
-          "Height": 73,
-          "Weight": 170,
-          "BirthDate": "1989-09-23T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20000812.png"
-        },
-        {
-          "Jersey": 33,
-          "PositionCategory": "G",
-          "Position": "PG",
-          "FirstName": "Trey",
-          "LastName": "Burke",
-          "Height": 73,
-          "Weight": 191,
-          "BirthDate": "1992-11-12T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20000836.png"
-        },
-        {
-          "Jersey": 5,
-          "PositionCategory": "F",
-          "Position": "PF",
-          "FirstName": "Markieff",
-          "LastName": "Morris",
-          "Height": 82,
-          "Weight": 245,
-          "BirthDate": "1989-09-02T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20000848.png"
-        },
-        {
-          "Jersey": 12,
-          "PositionCategory": "F",
-          "Position": "SF",
-          "FirstName": "Kelly",
-          "LastName": "Oubre Jr.",
-          "Height": 79,
-          "Weight": 205,
-          "BirthDate": "1995-12-09T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20001393.png"
-        },
-        {
-          "Jersey": 1,
-          "PositionCategory": "F",
-          "Position": "PF",
-          "FirstName": "Chris",
-          "LastName": "McCullough",
-          "Height": 81,
-          "Weight": 215,
-          "BirthDate": "1995-02-05T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20001409.png"
-        },
-        {
-          "Jersey": 9,
-          "PositionCategory": "G",
-          "Position": "SG",
-          "FirstName": "Sheldon",
-          "LastName": "Mcclellan",
-          "Height": 78,
-          "Weight": 200,
-          "BirthDate": "1992-12-21T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20001738.png"
-        },
-        {
-          "Jersey": 31,
-          "PositionCategory": "G",
-          "Position": "SG",
-          "FirstName": "Tomas",
-          "LastName": "Satoransky",
-          "Height": 79,
-          "Weight": 210,
-          "BirthDate": "1991-10-30T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20001749.png"
-        },
-        {
-          "Jersey": 32,
-          "PositionCategory": "F",
-          "Position": "PF",
-          "FirstName": "Daniel",
-          "LastName": "Ochefu",
-          "Height": 83,
-          "Weight": 245,
-          "BirthDate": "1993-12-15T00:00:00",
-          "PhotoUrl": "http://static.fantasydata.com/headshots/nba/low-res/20001755.png"
-        }
-
-    ]
-
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-      this.state.players = this.teamPlayersArray;
-      this.state = {
-        players: ds.cloneWithRows(this.state.players ),
-        loading: false
+        this.state = {
+          players: ds.cloneWithRows([]),
+          loading: true
       }
   }
 
@@ -303,7 +152,7 @@ const styles = StyleSheet.create({
     borderStyle : "solid",
     borderWidth : 2,
     margin: 5,
-    width: 120,
+    width: 110,
     height: 130,
     alignItems: 'center',
     backgroundColor: 'white',
