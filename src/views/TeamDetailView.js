@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     borderStyle : "solid",
     borderWidth : 2,
     margin: 5,
-    width: 100,
+    width: 120,
     height: 130,
     alignItems: 'center',
     backgroundColor: 'white',
