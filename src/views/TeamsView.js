@@ -2,49 +2,98 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  View,
-  Text,
+  View, 
   TouchableHighlight,
   ListView,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  NetInfo,
 } from 'react-native';
 
 import TeamCell from '../cells/TeamCell';
 import Header from '../common/Header';
 import BottomBar from '../common/BottomBar';
+import ConnectionErrorView from '../common/ConnectionErrorView';
 import _ from 'underscore';
 
 export default class teamsView extends Component {
-  state = { teams: [], loading: true }
+  state = { teams: [], loading: false, connection: "" }
 
     constructor(props){
         super(props);
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
           teams: ds.cloneWithRows([]),
-          loading: true
+          loading: false,
+          connection: ""
       }
     }
 
+    networkStateChanged(reach){
+      this.setState({ connection: reach });
+      const connection = this.state.connection;
+
+      if ((connection == 'WIFI' || connection == 'MOBILE') && this.state.teams.getRowCount() == 0){
+         this.setState({ loading: true});
+         this.getTeams();
+      }
+
+    }
+
     async componentWillMount() {
+
+      NetInfo.addEventListener(
+        'change', reach => this.networkStateChanged(reach)
+      );
+    }
+
+
+  render() {
+
+    const navigator = this.props.navigator;
+    const { teams, loading, connection} = this.state;
+
+    return (
+        <View style={styles.container}>
+
+          { this.state.teams.getRowCount() == 0 && connection === 'NONE' && <ConnectionErrorView />}
+
+          {loading && <ActivityIndicator style={styles.loading} /> }
+
+          {!loading && this.state.teams.getRowCount() > 0 &&
+          <View>
+            <Header label="TEAMS"/>
+            <View style={styles.listContainer}>
+              <ListView style={styles.list}
+              contentContainerStyle={styles.contentList}
+              dataSource={this.state.teams}
+              enableEmptySections={true}
+              renderRow={(team) => this.renderListViewItem(team) }
+              />
+           </View>
+           <BottomBar navigator={navigator}/>
+        </View>
+          }
+      </View>
+    );
+  }
+
+
+  //METHODS
+  async getTeams(){
       const uri = 'http://lmira.lasalle.ovh/api/teams';
 
       try {
         const response = await fetch(uri);
         const jsonData = await response.json();
-
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.setState({ loading: false , teams: ds.cloneWithRows(jsonData)})
       } catch(e) {
         console.log(e);
-      }
+      }   
     }
 
-
-
-
-  renderListViewItem(team){
+    renderListViewItem(team){
     return (
       <TouchableHighlight
         style={styles.touchableTeam} 
@@ -56,34 +105,6 @@ export default class teamsView extends Component {
       </TouchableHighlight>
       )
     }
-
-  render() {
-
-    const navigator = this.props.navigator;
-    const { teams, loading } = this.state;
-
-    if (loading) {
-      return <ActivityIndicator/>
-    }   
-
-    return (
-        <View style={styles.container}>
-        <Header label="TEAMS"/>
-        <View style={styles.listContainer}>
-        <ListView style={styles.list}
-          contentContainerStyle={styles.contentList}
-          dataSource={this.state.teams}
-          enableEmptySections={true}
-          renderRow={(team) => 
-            this.renderListViewItem(team)
-          }
-         />
-         </View>
-        
-        <BottomBar navigator={navigator}/>
-      </View>
-    );
-  }
 }
 
 const styles = StyleSheet.create({

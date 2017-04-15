@@ -7,7 +7,8 @@ import {
   ListView,
   Image,
   TouchableHighlight,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 
 import Header from '../common/Header';
@@ -25,11 +26,9 @@ export default class teamDetailView extends Component {
         "Ocp-Apim-Subscription-Key" : "11a0a6437f5843aeb9dfef82f0b3670b"
       })
     });
-
     try {
         const response = await fetch(request);
         const jsonData = await response.json();
-        
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.setState({ loading: false , players: ds.cloneWithRows(jsonData)})
       } catch(e) {
@@ -91,8 +90,15 @@ renderPlayerView(player){
 
   render() {
 
+    const { players, loading } = this.state;
     const team = this.props.route.data;
+    
     const navigator = this.props.navigator;
+
+    if (loading) {
+      return <ActivityIndicator/>
+    }
+    
 
     return (
       <View style={styles.container}>
