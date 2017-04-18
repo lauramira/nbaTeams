@@ -28,6 +28,10 @@ export default class stadiumView extends Component {
 
     constructor(props){
         super(props);
+
+        NetInfo.fetch().done((reach) => {
+          this.setState({connection: reach});
+        });
     }
 
     thereIsStadiumSelected() {

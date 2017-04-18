@@ -29,6 +29,10 @@ export default class teamsView extends Component {
         loading: false,
         connection: ""
     }
+
+    NetInfo.fetch().done((reach) => {
+      this.setState({connection: reach});
+    });
   }
 
   render() {
@@ -66,7 +70,6 @@ export default class teamsView extends Component {
   networkStateChanged(reach){
     this.setState({ connection: reach });
     const connection = this.state.connection;
-
     if ((connection.toUpperCase() == 'WIFI' || connection.toUpperCase() == 'MOBILE') 
     && this.state.teams.getRowCount() == 0){
         this.setState({ loading: true});
