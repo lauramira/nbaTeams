@@ -20,47 +20,16 @@ import _ from 'underscore';
 export default class teamsView extends Component {
   state = { teams: [], loading: false, connection: "" }
 
-    constructor(props){
-        super(props); 
+  constructor(props){
+      super(props); 
 
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.state = {
-          teams: ds.cloneWithRows([]),
-          loading: false,
-          connection: ""
-      }
+      const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      this.state = {
+        teams: ds.cloneWithRows([]),
+        loading: false,
+        connection: ""
     }
-
-    networkStateChanged(reach){
-      this.setState({ connection: reach });
-      const connection = this.state.connection;
-
-      if ((connection.toUpperCase() == 'WIFI' || connection.toUpperCase() == 'MOBILE') 
-      && this.state.teams.getRowCount() == 0){
-         this.setState({ loading: true});
-         this.getTeams();
-      }
-    }
-
-    async componentWillMount() {
-
-      try {
-          const teamsString = await AsyncStorage.getItem('NbaTeams:teams');
-          const teams = JSON.parse(teamsString);
-          if (teams && teams.length > 0){
-            const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-             this.setState({ teams: ds.cloneWithRows(teams)})
-          } else {
-             NetInfo.addEventListener(
-              'change', reach => this.networkStateChanged(reach)
-            );
-          }
-         
-        } catch(e) {
-          console.log(e);
-        }
-    }
-
+  }
 
   render() {
 
@@ -94,6 +63,34 @@ export default class teamsView extends Component {
 
 
   //METHODS
+  networkStateChanged(reach){
+    this.setState({ connection: reach });
+    const connection = this.state.connection;
+
+    if ((connection.toUpperCase() == 'WIFI' || connection.toUpperCase() == 'MOBILE') 
+    && this.state.teams.getRowCount() == 0){
+        this.setState({ loading: true});
+        this.getTeams();
+    }
+  }
+
+  async componentWillMount() {
+    try {
+        const teamsString = await AsyncStorage.getItem('NbaTeams:teams');
+        const teams = JSON.parse(teamsString);
+        if (teams && teams.length > 0){
+          const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+            this.setState({ teams: ds.cloneWithRows(teams)})
+        } else {
+            NetInfo.addEventListener(
+            'change', reach => this.networkStateChanged(reach)
+          );
+        }       
+      } catch(e) {
+        console.log(e);
+      }
+  }
+
   async getTeams(){
       const uri = 'http://lmira.lasalle.ovh/api/teams';
 
@@ -103,7 +100,6 @@ export default class teamsView extends Component {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.setState({ loading: false , teams: ds.cloneWithRows(jsonData)})
 
-        const teams = this.state.teams;
         await AsyncStorage.setItem('NbaTeams:teams', JSON.stringify(jsonData));
 
       } catch(e) {
