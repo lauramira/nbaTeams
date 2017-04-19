@@ -6,9 +6,9 @@ You can check the active teams playing on the NBA league and locate their stadiu
 
 ### Prerequisites
 
-First of all you have to install some components as is indicated in this link https://facebook.github.io/react-native/docs/getting-started.html
+First of all, you have to install some components as it is indicated in this link https://facebook.github.io/react-native/docs/getting-started.html
 
-Once all required component are installed you have to navigate with the terminal to the root of the project.
+Once all required components are installed you have to navigate with the terminal to the root of the project.
 
 ### Installing
 
@@ -26,7 +26,7 @@ To start the server you must run this command:
 npm start
 ```
 
-On a diferent terminal:
+On a different terminal:
 
 #### iOS
 
@@ -41,7 +41,7 @@ react-native run-android
 ```
 ## Helper
 
-If you can't see the map on the two platforms you should run this commands:
+If you can't see the map on the two platforms you should run these commands:
 
 ```
 react-native unlink react-native-maps
