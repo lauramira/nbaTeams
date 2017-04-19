@@ -32,6 +32,11 @@ export default class teamsView extends Component {
 
     NetInfo.fetch().done((reach) => {
       this.setState({connection: reach});
+      if ((reach.toUpperCase() == 'WIFI' || reach.toUpperCase() == 'MOBILE') 
+      && this.state.teams.getRowCount() == 0){
+          this.setState({ loading: true});
+          this.getTeams();
+      }
     });
   }
 
@@ -45,7 +50,7 @@ export default class teamsView extends Component {
 
           { this.state.teams.getRowCount() == 0 && connection.toUpperCase() === 'NONE' && <ConnectionErrorView />}
 
-          {loading && <ActivityIndicator style={styles.loading} /> }
+          {loading && <ActivityIndicator /> }
 
           {!loading && this.state.teams.getRowCount() > 0 &&
           <View>
@@ -68,7 +73,6 @@ export default class teamsView extends Component {
 
   //METHODS
   networkStateChanged(reach){
-    this.setState({ connection: reach });
     const connection = this.state.connection;
     if ((connection.toUpperCase() == 'WIFI' || connection.toUpperCase() == 'MOBILE') 
     && this.state.teams.getRowCount() == 0){
@@ -86,8 +90,10 @@ export default class teamsView extends Component {
             this.setState({ teams: ds.cloneWithRows(teams)})
         } else {
             NetInfo.addEventListener(
-            'change', reach => this.networkStateChanged(reach)
-          );
+              'change', (reach) => {
+                this.setState({ connection: reach });
+                this.networkStateChanged(reach)}
+            );
         }       
       } catch(e) {
         console.log(e);

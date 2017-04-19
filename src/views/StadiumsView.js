@@ -31,6 +31,11 @@ export default class stadiumView extends Component {
 
         NetInfo.fetch().done((reach) => {
           this.setState({connection: reach});
+          if ((reach.toUpperCase() == 'WIFI' || reach.toUpperCase() == 'MOBILE') 
+            && this.state.stadiums.length == 0){
+                this.setState({ loading: true});
+                this.getStadiums();
+            }
         });
     }
 
@@ -54,10 +59,7 @@ export default class stadiumView extends Component {
   render() {
     const navigator = this.props.navigator;
 
-    const { stadiums, loading, error, connection } = this.state;
-    if (loading) {
-      return <ActivityIndicator style={styles.loading} />
-    }  
+    const { stadiums, loading, error, connection } = this.state; 
 
     return (
       <View style={styles.container}>
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#002244',
-    height: Dimensions.get('window').height,
+    height: Dimensions.get('window').height
   },
   map: {
     flex: 2,
