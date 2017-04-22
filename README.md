@@ -8,7 +8,7 @@ You can check the active teams playing on the NBA league and locate their stadiu
 
 First of all, you have to install some components as it is indicated in this link https://facebook.github.io/react-native/docs/getting-started.html
 
-Once all required component are installed you have to navigate with the terminal to the root of the project.
+Once all required components are installed you have to navigate with the terminal to the root of the project.
 
 ### Installing
 

@@ -29,16 +29,9 @@ export default class teamsView extends Component {
         loading: false,
         connection: ""
     }
-
-    NetInfo.fetch().done((reach) => {
-      this.setState({connection: reach});
-      if ((reach.toUpperCase() == 'WIFI' || reach.toUpperCase() == 'MOBILE') 
-      && this.state.teams.getRowCount() == 0){
-          this.setState({ loading: true});
-          this.getTeams();
-      }
-    });
   }
+
+
 
   render() {
 
@@ -73,7 +66,9 @@ export default class teamsView extends Component {
 
   //METHODS
   networkStateChanged(reach){
+    this.setState({ connection: reach });
     const connection = this.state.connection;
+
     if ((connection.toUpperCase() == 'WIFI' || connection.toUpperCase() == 'MOBILE') 
     && this.state.teams.getRowCount() == 0){
         this.setState({ loading: true});
@@ -82,6 +77,15 @@ export default class teamsView extends Component {
   }
 
   async componentWillMount() {
+    NetInfo.fetch().done((reach) => {
+      this.setState({connection: reach});
+      if ((reach.toUpperCase() == 'WIFI' || reach.toUpperCase() == 'MOBILE') 
+      && this.state.teams.getRowCount() == 0){
+          this.setState({ loading: true});
+          this.getTeams();
+      }
+    });
+
     try {
         const teamsString = await AsyncStorage.getItem('NbaTeams:teams');
         const teams = JSON.parse(teamsString);
@@ -90,9 +94,7 @@ export default class teamsView extends Component {
             this.setState({ teams: ds.cloneWithRows(teams)})
         } else {
             NetInfo.addEventListener(
-              'change', (reach) => {
-                this.setState({ connection: reach });
-                this.networkStateChanged(reach)}
+              'change', (reach) => this.networkStateChanged(reach)
             );
         }       
       } catch(e) {
