@@ -7,44 +7,53 @@ import {
   ListView,
   Image,
   TouchableHighlight,
+  ActivityIndicator,
+  NetInfo,
   TouchableOpacity
 } from 'react-native';
 
 import Header from '../common/Header';
-import PlayerInfoKeyValue from '../cells/PlayerInfoKeyValue';
+import ConnectionErrorView from '../common/ConnectionErrorView';
 import Modal from 'react-native-modal';
+import ModalContentView from '../modal/ModalContentView';
 
 export default class teamDetailView extends Component {
 
-  state = { players: [], loading: true, isModalVisible: false, selectedPlayer: null }
-
-  async componentWillMount() {
-    const uri = 'https://api.fantasydata.net/v3/nba/stats/JSON/Players/' + this.props.route.data.Key;
-    const request = new Request(uri, {
-      headers: new Headers({
-        "Ocp-Apim-Subscription-Key" : "11a0a6437f5843aeb9dfef82f0b3670b"
-      })
-    });
-
-    try {
-        const response = await fetch(request);
-        const jsonData = await response.json();
-        
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.setState({ loading: false , players: ds.cloneWithRows(jsonData)})
-      } catch(e) {
-        console.log(e);
-      }
-    }
+  state = { players: [], loading: false, isModalVisible: false, selectedPlayer: null, connection : "" }
 
   constructor(props){
     super(props);
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
           players: ds.cloneWithRows([]),
-          loading: true
+          loading: false,
+          connection: "",
+          isModalVisible: false,
+          selectedPlayer: null
       }
+
+       NetInfo.fetch().done((reach) => {
+        this.setState({connection: reach});
+        if ((reach.toUpperCase() == 'WIFI' || reach.toUpperCase() == 'MOBILE') 
+          && this.state.players.getRowCount() == 0){
+              this.setState({ loading: true});
+              this.getPlayers();
+        }
+      });
   }
+
+  showPlayerDetail = (player) => {
+    this.setState({ selectedPlayer: player , isModalVisible: true})
+  }
+
+  _renderModalContent = (selectedPlayer) => (
+    <View>
+      {selectedPlayer && <View style={styles.modalContent}>
+        <ModalContentView selectedPlayer={selectedPlayer}/>
+        {this._renderButton('Close', () => this.setState({ isModalVisible: false }))}
+      </View>}
+    </View>
+  );
 
    _renderButton = (text, onPress) => (
     <TouchableOpacity onPress={onPress}>
@@ -52,28 +61,6 @@ export default class teamDetailView extends Component {
         <Text style={styles.buttonText}>{text}</Text>
       </View>
     </TouchableOpacity>
-  );
-
-  showPlayerDetail = (player) => {
-    this.setState({ selectedPlayer: player , isModalVisible: true})
-  }
-
-  getDateFormat(date) {
-    return date.split("T")[0];
-  }
-
-  _renderModalContent = (selectedPlayer) => (
-    <View >
-      {selectedPlayer && <View style={styles.modalContent}>
-        <Text style={styles.title}>{selectedPlayer.FirstName + " " + selectedPlayer.LastName}</Text>
-        <PlayerInfoKeyValue index={0} value={"#" + selectedPlayer.Jersey} />
-        <PlayerInfoKeyValue index={1} value={selectedPlayer.Position} />
-        <PlayerInfoKeyValue index={2} value={selectedPlayer.Height} />
-        <PlayerInfoKeyValue index={3} value={selectedPlayer.Weight} />
-        <PlayerInfoKeyValue index={4} value={this.getDateFormat(selectedPlayer.BirthDate)} />
-        {this._renderButton('Close', () => this.setState({ isModalVisible: false }))}
-      </View>}
-    </View>
   );
   
 renderPlayerView(player){
@@ -91,27 +78,74 @@ renderPlayerView(player){
 
   render() {
 
+    const { players, loading, connection } = this.state;
     const team = this.props.route.data;
+    
     const navigator = this.props.navigator;
 
     return (
       <View style={styles.container}>
-        <Header label={team.City + " " + team.Name} hasBackButton={true} navigator={navigator}/>
-        <View style={styles.dataView}>
-            <ListView
-              contentContainerStyle={styles.contentList}
-              dataSource={this.state.players}
-              enableEmptySections={true}
-              renderRow={(player) => 
-                this.renderPlayerView(player)
-              }
-            />
-        </View>
-        <Modal isVisible={this.state.isModalVisible}>
-          {this._renderModalContent(this.state.selectedPlayer)}
-        </Modal>
+        { this.state.players.getRowCount() == 0 && connection.toUpperCase() === 'NONE' && <ConnectionErrorView />}
+    
+        {loading && <ActivityIndicator /> }
+        
+        {!loading && this.state.players.getRowCount() > 0 &&
+        <View>
+          <Header label={team.City + " " + team.Name} hasBackButton={true} navigator={navigator}/>
+          <View style={styles.dataView}>
+              <ListView
+                contentContainerStyle={styles.contentList}
+                dataSource={this.state.players}
+                enableEmptySections={true}
+                renderRow={(player) => 
+                  this.renderPlayerView(player)
+                }
+              />
+          </View>
+          <Modal isVisible={this.state.isModalVisible}>
+            {this._renderModalContent(this.state.selectedPlayer)}
+          </Modal>
+          </View>
+        }
       </View>
     );
+  }
+
+  //METHODS
+  networkStateChanged(reach){
+    this.setState({ connection: reach });
+    const connection = this.state.connection;
+    if ((connection.toUpperCase() == 'WIFI' || connection.toUpperCase() == 'MOBILE') 
+    && this.state.players.getRowCount() == 0){
+        this.setState({ loading: true});
+        this.getPlayers();
+    }
+  }
+
+  async componentWillMount() {
+    NetInfo.addEventListener(
+      'change', reach => this.networkStateChanged(reach)
+    );
+  }
+
+  async getPlayers(){
+    const uri = 'https://api.fantasydata.net/v3/nba/stats/JSON/Players/' + this.props.route.data.Key;
+
+    const request = new Request(uri, {
+      headers: new Headers({
+        "Ocp-Apim-Subscription-Key" : "11a0a6437f5843aeb9dfef82f0b3670b"
+      })
+    });
+
+    try {
+      const response = await fetch(request);
+      const jsonData = await response.json();
+      const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      this.setState({ loading: false , players: ds.cloneWithRows(jsonData)})
+
+    } catch(e) {
+      console.log(e);
+    }   
   }
 }
 
@@ -142,12 +176,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
     
   },
-  title: {
-    fontWeight: "bold",
-    fontSize: 12,
-    marginBottom: 10,
-    marginTop: 10
-  },
   viewContainer :{
     borderStyle : "solid",
     borderWidth : 2,
@@ -177,5 +205,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 12,
+    marginBottom: 10,
+    marginTop: 10
   }
 });
