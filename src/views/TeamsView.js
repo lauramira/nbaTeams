@@ -65,7 +65,7 @@ export default class teamsView extends Component {
 
 
   //METHODS
-  networkStateChanged(reach){
+  networkStateChangedTeam(reach){
     this.setState({ connection: reach });
     const connection = this.state.connection;
 
@@ -94,7 +94,7 @@ export default class teamsView extends Component {
             this.setState({ teams: ds.cloneWithRows(teams)})
         } else {
             NetInfo.addEventListener(
-              'change', (reach) => this.networkStateChanged(reach)
+              'change', (reach) => this.networkStateChangedTeam(reach)
             );
         }       
       } catch(e) {
@@ -104,7 +104,7 @@ export default class teamsView extends Component {
 
   componentWillUnmount() { 
       NetInfo.removeEventListener( 
-        'change',  (reach) => this.networkStateChanged(reach) 
+        'change',  (reach) => this.networkStateChangedTeam(reach) 
     ); 
   }
 

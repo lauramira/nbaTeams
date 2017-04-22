@@ -44,15 +44,7 @@ export default class stadiumView extends Component {
         return <Image style={styles.mapImage} source={ require("../assets/nba.png")}/>
       } else {
         const stadium = this.state.stadiumSelected;
-        return <StadiumCell 
-              name={stadium.Name}
-              city={stadium.City}
-              zip={stadium.Zip}
-              address={stadium.Address}
-              state={stadium.State}
-              capacity={stadium.Capacity}
-              stadiumId={stadium.StadiumID}
-              />
+        return <StadiumCell stadium={stadium}/>
       }
     }
 
@@ -103,7 +95,7 @@ export default class stadiumView extends Component {
   }
 
   //METHODS
-  networkStateChanged(reach){
+  networkStateChangedStadium(reach){
     this.setState({ connection: reach });
     const connection = this.state.connection;
 
@@ -122,7 +114,7 @@ export default class stadiumView extends Component {
             this.setState({ stadiums: stadiums})
         } else {
             NetInfo.addEventListener(
-            'change', reach => this.networkStateChanged(reach)
+            'change', reach => this.networkStateChangedStadium(reach)
           );
         }       
       } catch(e) {
@@ -132,7 +124,7 @@ export default class stadiumView extends Component {
 
   componentWillUnmount() { 
       NetInfo.removeEventListener( 
-        'change',  (reach) => this.networkStateChanged(reach) 
+        'change',  (reach) => this.networkStateChangedStadium(reach) 
     ); 
   }
 

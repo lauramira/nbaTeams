@@ -116,8 +116,7 @@ backToTeamView(navigator){
   }
 
   //METHODS
-  networkStateChanged(reach){
-    debugger;
+  networkStateChangedTeamDetail = (reach) => {
     this.setState({ connection: reach });
     const connection = this.state.connection;
     if ((connection.toUpperCase() == 'WIFI' || connection.toUpperCase() == 'MOBILE') 
@@ -125,18 +124,18 @@ backToTeamView(navigator){
         this.setState({ loading: true});
         this.getPlayers();
     }
-  }
+  };
+
 
   componentWillMount() {
     NetInfo.addEventListener(
-      'change', reach => this.networkStateChanged(reach)
+      'change', this.networkStateChangedTeamDetail
     );
   }
 
   componentWillUnmount() { 
-    debugger;
       NetInfo.removeEventListener( 
-        'change', (reach) => this.networkStateChanged
+        'change', this.networkStateChangedTeamDetail
     ); 
   }
 
