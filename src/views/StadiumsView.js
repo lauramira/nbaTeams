@@ -130,6 +130,12 @@ export default class stadiumView extends Component {
       }
   }
 
+  componentWillUnmount() { 
+      NetInfo.removeEventListener( 
+        'change',  (reach) => this.networkStateChanged(reach) 
+    ); 
+  }
+
   async getStadiums(){
       const uri = 'http://lmira.lasalle.ovh/api/stadiums';
       try {

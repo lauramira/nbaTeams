@@ -76,6 +76,10 @@ renderPlayerView(player){
   )
 }
 
+backToTeamView(navigator){
+  navigator.pop({name: 'teamView'});
+}
+
   render() {
 
     const { players, loading, connection } = this.state;
@@ -91,7 +95,7 @@ renderPlayerView(player){
         
         {!loading && this.state.players.getRowCount() > 0 &&
         <View>
-          <Header label={team.City + " " + team.Name} hasBackButton={true} navigator={navigator}/>
+          <Header label={team.City + " " + team.Name} hasBackButton={true} onClickbackButton={this.backToTeamView} navigator={navigator}/>
           <View style={styles.dataView}>
               <ListView
                 contentContainerStyle={styles.contentList}
@@ -113,6 +117,7 @@ renderPlayerView(player){
 
   //METHODS
   networkStateChanged(reach){
+    debugger;
     this.setState({ connection: reach });
     const connection = this.state.connection;
     if ((connection.toUpperCase() == 'WIFI' || connection.toUpperCase() == 'MOBILE') 
@@ -122,10 +127,17 @@ renderPlayerView(player){
     }
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     NetInfo.addEventListener(
       'change', reach => this.networkStateChanged(reach)
     );
+  }
+
+  componentWillUnmount() { 
+    debugger;
+      NetInfo.removeEventListener( 
+        'change', (reach) => this.networkStateChanged
+    ); 
   }
 
   async getPlayers(){

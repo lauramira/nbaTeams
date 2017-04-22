@@ -102,6 +102,12 @@ export default class teamsView extends Component {
       }
   }
 
+  componentWillUnmount() { 
+      NetInfo.removeEventListener( 
+        'change',  (reach) => this.networkStateChanged(reach) 
+    ); 
+  }
+
   async getTeams(){
       const uri = 'http://lmira.lasalle.ovh/api/teams';
 

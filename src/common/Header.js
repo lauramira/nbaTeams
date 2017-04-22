@@ -14,13 +14,14 @@ export default class Header extends Component {
 
     const label = this.props.label;
     const hasBackButton = this.props.hasBackButton;
+    const onClickbackButton = this.props.onClickbackButton;
     const navigator = this.props.navigator;
 
     return (
       <View style={styles.container}>
         {hasBackButton && 
           <TouchableHighlight style={styles.backButton}
-            onPress={() => navigator.pop({name: 'teamView'})}>
+            onPress={() => onClickbackButton(navigator)}>
             <Image source={require('../assets/icons/ic_keyboard_backspace_white.png')}/>
           </TouchableHighlight>}
         <Text style={styles.label}>{label}</Text>
